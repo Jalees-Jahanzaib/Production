@@ -1,0 +1,35 @@
+{% extends "blog/base.html" %}
+{% block content %}
+{% for file in Files %}
+<article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ file.author }}</a>
+        <small class="text-muted">{{ file.date_posted | date:"F d, Y" }}</small>
+      </div>
+      <h2
+      ><a class="article-title" href="{% url 'file-detail' file.id %}">{{ file.title }}</a></h2>
+         
+      {%  for C in file.comments.all %}
+      {% if C.final == "True" %}
+        <button type="button" class="btn btn-info btn-sm mt-1 mb-1">Completed</button>
+       {% elif C.stage3 == "True" %}
+       <button type="button" class="btn btn-warning btn-sm mt-1 mb-1">Phase 3</button>
+       {% elif C.stage2 == "True" %}
+       <button type="button" class="btn btn-success btn-sm mt-1 mb-1">Phase 2</button>
+       {% else  %}
+       <button type="button" class="btn btn-danger btn-sm mt-1 mb-1">Phase 1</button>
+       {% endif %} 
+       {% endfor %}
+     <h3><a class="btn btn-dark btn-sm mt-1 mb-1"  href="{% url 'file-detail' pk=file.id %}">Remarks: {{ file.comments.count }}</a></h3> 
+      <p class="article-content">{{ file.summary }}</p>
+    </div>
+  </article>
+
+
+{% endfor %}
+
+
+{% endblock %}
+
+
